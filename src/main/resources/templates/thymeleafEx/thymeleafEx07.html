@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout1}"
+      lang="kr">
+
+<div layout:fragment="content">
+    <!-- start hero slider -->
+    <section class="hero-slider">
+        <img class="position-absolute d-none d-md-inline-block" style="top: 115px; left: -1.5rem; z-index: 9;" th:src="@{/assets/img/pattern-02.png}" alt="" />
+
+        <div class="swiper-container home-slider-2">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide bg-img-hero" th:style="'background-image: url('+@{/assets/img/slider/home-slider-5.jpg}+');'">
+                    <div class="container-lg container-fluid">
+                        <div class="row home-slider-inner py-9 justify-content-center align-items-center text-center">
+                            <div class="col-md-11 col-lg-10 col-xl-9">
+                                <div class="row justify-content-center">
+                                    <div class="col-8 col-md-6">
+                                        <h1 class="font-weight-normal text-light font-size-display2 font-size-md-display1 font-family-unna mb-4 mb-md-6"
+                                            data-aos="fade-right" data-aos-once="true" data-aos-duration="300">Find your <br/> Coffee</h1>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <div class="row justify-content-center justify-content-md-between mt-lg-n8">
+                                    <div class="col-9 col-md-5 col-lg-4 mb-3 mb-md-0"
+                                         data-aos="fade-right" data-aos-once="true" data-aos-duration="600">
+                                        <span class="bg-light d-inline-block rounded-circle mb-3" style="width: 21px; height: 21px;"></span>
+                                        <h4 class="font-family-sans-serif text-light">내 입맛에 꼭 맞는 커피로 추천받고 구독하세요</h4>
+                                    </div><!-- end col -->
+
+                                    <div class="col-9 col-md-5 col-lg-4 mb-3 mb-md-0"
+                                         data-aos="fade-left" data-aos-once="true" data-aos-duration="600">
+                                        <span class="bg-light d-inline-block rounded-circle mb-3" style="width: 21px; height: 21px;"></span>
+                                        <h4 class="font-family-sans-serif text-light">내 취향에 딱 맞는 원두를 추천해요. 구독을 시작하고 항상 무료 배송으로 받아보세요.</h4>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <a href="#" class="font-family-unna d-inline-block btn btn-minimalis-outline-up-light font-size-h4 border border-light rounded-circle mt-4 mt-lg-n4 p-0 " style="line-height: 108px; width: 108px; height: 108px; min-width: 0;"
+                                   data-aos="fade-up" data-aos-once="true" data-aos-duration="800">Discover</a>
+                            </div><!-- end col -->
+                        </div><!-- end home-slider-inner -->
+                    </div><!-- end container -->
+                </div><!-- end swiper-slide -->
+
+                <div class="swiper-slide bg-img-hero" th:style="'background-image: url('+@{/assets/img/slider/home-slider-6.jpg}+');'">
+                    <div class="container-lg container-fluid">
+                        <div class="row home-slider-inner py-9 justify-content-center align-items-center text-center">
+                            <div class="col-md-11 col-lg-10 col-xl-9">
+                                <div class="row justify-content-center">
+                                    <div class="col-8 col-md-6">
+                                        <h1 class="font-weight-normal text-light font-size-display2 font-size-md-display1 font-family-unna mb-4 mb-md-6"
+                                            data-aos="fade-down" data-aos-once="true" data-aos-duration="300">Find your <br/> Coffee</h1>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <div class="row justify-content-center justify-content-md-between mt-lg-n8">
+                                    <div class="col-9 col-md-5 col-lg-4 mb-3 mb-md-0"
+                                         data-aos="fade-right" data-aos-once="true" data-aos-duration="600">
+                                        <span class="bg-light d-inline-block rounded-circle mb-3" style="width: 21px; height: 21px;"></span>
+                                        <h4 class="font-family-sans-serif text-light">내 입맛에 꼭 맞는 커피로 추천받고 구독하세요</h4>
+                                    </div><!-- end col -->
+
+                                    <div class="col-9 col-md-5 col-lg-4 mb-3 mb-md-0"
+                                         data-aos="fade-left" data-aos-once="true" data-aos-duration="600">
+                                        <span class="bg-light d-inline-block rounded-circle mb-3" style="width: 21px; height: 21px;"></span>
+                                        <h4 class="font-family-sans-serif text-light">내 취향에 딱 맞는 원두를 추천해요. 구독을 시작하고 항상 무료 배송으로 받아보세요.</h4>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <a href="#" class="font-family-unna d-inline-block btn btn-minimalis-outline-up-light font-size-h4 border border-light rounded-circle mt-4 mt-lg-n4 p-0" style="line-height: 108px; width: 108px; height: 108px; min-width: 0;"
+                                   data-aos="fade-up" data-aos-once="true" data-aos-duration="800">Discover</a>
+                            </div><!-- end col -->
+                        </div><!-- end home-slider-inner -->
+                    </div><!-- end container -->
+                </div><!-- end swiper-slide -->
+
+                <div class="swiper-slide bg-img-hero" th:style="'background-image: url('+@{/assets/img/slider/home-slider-7.jpg}+');'">
+                    <div class="container-lg container-fluid">
+                        <div class="row home-slider-inner py-9 justify-content-center align-items-center text-center">
+                            <div class="col-md-11 col-lg-10 col-xl-9">
+                                <div class="row justify-content-center">
+                                    <div class="col-8 col-md-6">
+                                        <h1 class="font-weight-normal text-light font-size-display2 font-size-md-display1 font-family-unna mb-4 mb-md-6"
+                                            data-aos="fade-right" data-aos-once="true" data-aos-duration="300">Find your <br/> Coffee</h1>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <div class="row justify-content-center justify-content-md-between mt-lg-n8">
+                                    <div class="col-9 col-md-5 col-lg-4 mb-3 mb-md-0"
+                                         data-aos="fade-right" data-aos-once="true" data-aos-duration="600">
+                                        <span class="bg-light d-inline-block rounded-circle mb-3" style="width: 21px; height: 21px;"></span>
+                                        <h4 class="font-family-sans-serif text-light">내 입맛에 꼭 맞는 커피로 추천받고 구독하세요</h4>
+                                    </div><!-- end col -->
+
+                                    <div class="col-9 col-md-5 col-lg-4 mb-3 mb-md-0"
+                                         data-aos="fade-left" data-aos-once="true" data-aos-duration="600">
+                                        <span class="bg-light d-inline-block rounded-circle mb-3" style="width: 21px; height: 21px;"></span>
+                                        <h4 class="font-family-sans-serif text-light">내 취향에 딱 맞는 원두를 추천해요. 구독을 시작하고 항상 무료 배송으로 받아보세요.</h4>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <a href="#" class="font-family-unna d-inline-block btn btn-minimalis-outline-up-light font-size-h4 border border-light rounded-circle mt-4 mt-lg-n4 p-0" style="line-height: 108px; width: 108px; height: 108px; min-width: 0;"
+                                   data-aos="fade-up" data-aos-once="true" data-aos-duration="800">Discover</a>
+                            </div><!-- end col -->
+                        </div><!-- end home-slider-inner -->
+                    </div><!-- end container -->
+                </div><!-- end swiper-slide -->
+            </div><!-- end swiper-wrapper -->
+
+            <!-- Add Arrows -->
+            <div class="arrow-icons">
+                <i class="flaticon-left-arrow-1 swiper-prev-icon text-white mr-3"></i>
+                <i class="flaticon-right-arrow swiper-next-icon text-white ml-3"></i>
+            </div><!-- arrows -->
+        </div><!-- end swiper-container -->
+    </section>
+    <!-- end hero slider -->
+</div>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thyleaf.org/extras/spring-security"
+      lang="kr">
+
+
+
+<div th:fragment="header">
+
+
+    <!-- header -->
+    <nav class="navbar sticky-navbar navbar-expand-lg navbar-light bg-white menu-border border-bottom">
+        <a href="/" class="navbar-brand mr-0 order-1 order-lg-2">
+            Wanna Do.
+        </a>
+        <div class="navbar-toggler p-0 border-0 flex-basic-30 text-left order-0">
+            <div class="custom-toggler" role="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </div><!-- end collapse -->
+        </div><!-- navbar-toggler -->
+
+        <div class="collapse navbar-collapse order-3 order-lg-1 flex-basic-100 border-top-0" id="navbarMenu">
+            <ul class="navbar-nav hovered-nav navbar-sm-full flex-basic-30 flex-basic-lg-100">
+                <li class="nav-item">
+                    <a class="nav-link" href="/" >
+                        My Taste
+                    </a>
+                </li><!-- end nav-item -->
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Coffee
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownBlog">
+                        <a class="dropdown-item" href="/shop">All Coffee</a>
+                        <a class="dropdown-item" href="/">Single Origin</a>
+                        <a class="dropdown-item" href="/">Blend</a>
+                    </div><!-- end dropdown-menu -->
+                </li><!-- end nav-item -->
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        Roastery
+                    </a>
+                </li><!-- end nav-item -->
+
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <a class="nav-link" href="/admin/item/new">
+                        상품등록
+                    </a>
+                </li><!-- end nav-item -->
+
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <a class="nav-link" href="/admin/items">
+                        상품관리
+                    </a>
+                </li><!-- end nav-item -->
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/board/new">
+                        게시판
+                    </a>
+                </li><!-- end nav-item -->
+
+                <li class="nav-item nav-search d-block d-lg-none">
+                    <form class="">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text pl-0 pr-1 border-0 bg-transparent">
+                                    <i class="flaticon-search search-icon"></i>
+                                </span><!-- end input-group-text -->
+                            </div><!-- end input-group-prepend -->
+                            <input type="text" class="form-control border-0" placeholder="Search product…" aria-label="Search product…">
+                        </div><!-- end input-group -->
+                    </form>
+                </li><!-- end nav-item -->
+            </ul><!-- end navbar-nav -->
+        </div><!-- end collapse -->
+
+        <ul class="navbar-nav navbar-icons hovered-nav justify-content-end flex-basic-30 flex-basic-lg-100 order-2 order-lg-3">
+            <li class="nav-item nav-search d-none d-lg-block">
+                <form class="nav-search-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-0 v-hidden" placeholder="Search product…" aria-label="Search product…">
+                        <div class="input-group-append">
+                            <span class="input-group-text pr-0 pl-1 border-0 bg-transparent">
+                                <i class="flaticon-search search-icon text-hover-primary"></i>
+                                <i class="flaticon-close close-icon text-hover-primary d-none"></i>
+                            </span><!-- end input-group-text -->
+                        </div><!-- end input-group-append -->
+                    </div><!-- end input-group -->
+                </form>
+            </li><!-- end nav-item -->
+
+            <!-- 위시리스트 아이콘(회원) -->
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#myWishlistModal">
+                        <span class="icon-label">
+                            <span class="label-value"></span>
+                            <i class="flaticon-like"></i>
+                        </span>
+                </a>
+            </li><!-- end nav-item -->
+
+            <!-- 장바구니 아이콘(회원) -->
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+<!--                <a class="nav-link" href="#" data-toggle="modal" data-target="#addToCartModal">-->
+                <a class="nav-link" th:href="@{/cart}">
+                        <span class="icon-label">
+                            <span class="label-value"></span>
+                            <i class="flaticon-shopping-cart"></i>
+                        </span>
+                </a>
+            </li><!-- end nav-item -->
+
+            <!-- 사용자 아이콘(비회원) -->
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/members/login" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="flaticon-user"></i>
+                </a>
+            </li>
+
+            <!-- 사용자 아이콘(회원) -->
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="#" id="navbarDropdownUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="flaticon-user"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUser">
+                    <a class="dropdown-item" href="/">My Profile</a>
+                    <a class="dropdown-item" th:href="@{/orders}">My Orders</a>
+                    <a class="dropdown-item" href="/">My Cart</a>
+                    <a class="dropdown-item" href="/">Wishlist</a>
+                    <a class="dropdown-item" href="/">Account</a>
+                    <a class="dropdown-item" href="/">Edit account</a>
+                    <a class="dropdown-item" href="/members/logout">Log out</a>
+                </div><!-- end dropdown-menu -->
+            </li><!-- end nav-item -->
+        </ul><!-- end navbar-nav -->
+    </nav><!-- end header -->
+</div>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        function cancelOrder(orderId) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/order/" + orderId + "/cancel";
+            var paramData = {
+                orderId : orderId,
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("주문이 취소 되었습니다.");
+                    location.href='/orders/' + [[${page}]];
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+        }
+    </script>
+
+</th:block>
+
+<div layout:fragment="content">
+
+    <nav class="navbar sticky-filter navbar-expand navbar-light bg-light navbar-filter menu-border border-bottom overflow-auto px-0">
+        <ul class="navbar-nav mr-auto ml-auto flex-nowrap">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="my-profile.html">
+                    My Profile
+                </a>
+            </li><!-- end nav-item -->
+
+            <li class="nav-item active text-nowrap">
+                <a class="nav-link text-primary" th:href="@{/orders}">
+                    My Orders
+                </a>
+            </li><!-- end nav-item -->
+
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" th:href="@{/cart}">
+                    My Cart
+                </a>
+            </li><!-- end nav-item -->
+
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="wishlist.html">
+                    Wishlist
+                </a>
+            </li><!-- end nav-item -->
+
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="account.html">
+                    Account
+                </a>
+            </li><!-- end nav-item -->
+        </ul><!-- end navbar-nav -->
+    </nav><!-- end navbar -->
+
+    <!-- start section -->
+    <section class="pt-6 pb-7 bg-white">
+        <div class="container-lg container-fluid">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-11 col-md-10 col-lg-6">
+                    <h2 class="font-weight-bold">My Orders</h2>
+                </div><!-- end col -->
+            </div><!-- end row -->
+
+            <div class="row">
+                <div class="col-12">
+                    <ul class="list-group list-group-lg list-group-flush border-top border-bottom">
+
+                        <!-- 주문 이력 목록 시작 -->
+                        <div th:each="order : ${orders.getContent()}">
+                        <li class="list-group-item p-0">
+                            <div class="row">
+                                <div class="col-md-5 col-lg-4 border-right-0 border-md-right">
+                                    <div class="row pt-4 pb-0 pb-md-4">
+                                        <div class="col-sm-12">
+                                            <h5 class="font-weight-bold mb-4 float-left float-md-none">
+                                                Product
+                                            </h5>
+                                        </div><!-- end col -->
+                                        <div class="col-sm-12">
+                                            <div class="row" th:each="orderItem : ${order.orderItemDtoList}">
+                                                <div class="col-3 col-md-auto" style="max-width: 40%">
+                                                    <img class="img-fluid" th:src="${orderItem.imgUrl}" alt="product">
+                                                </div><!-- end col -->
+                                                <div class="col-9 col-md pl-3 pl-md-2">
+                                                    <p class="mb-1"><span class="text-dark font-weight-bold" th:text="'주문 : ' + ${order.orderDate}"></span></p>
+                                                    <p class="mb-3 mb-md-4"><span class="text-dark font-weight-bold" th:text="'주문번호 : ' + ${order.orderId}"></span></p>
+
+                                                    <h5 class="mb-2 font-weight-bold" th:text="${orderItem.itemNm}"></h5><span th:text="${orderItem.count} +'개'"></span>
+                                                    <h5 class="mb-0 font-weight-normal" th:text="${orderItem.orderPrice} * ${orderItem.count} +'원'"></h5>
+
+                                                </div><!-- end col -->
+                                            </div><!-- end row -->
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </div><!-- end col -->
+
+                                <div class="col-md-4 col-lg-6">
+                                    <div class="row h-100 justify-content-end align-items-md-start align-items-lg-stretch border-right-0 border-md-right">
+                                        <div class="col-9 col-md-12">
+                                            <div class="row h-100">
+                                                <div class="col-md-12 col-lg-5 border-right-0 border-lg-right">
+                                                    <div class="row pt-3 pt-md-4">
+                                                        <div class="col-sm-12 pl-3 pr-3 pl-md-4 pr-md-4">
+                                                            <h5 class="font-weight-bold mb-2 mb-lg-4">Status</h5>
+                                                            <h5 class="font-weight-normal text-warning mb-0">[주문상태:구현필요]</h5>
+                                                        </div><!-- end col -->
+                                                    </div><!-- end row -->
+                                                </div><!-- end col -->
+                                                <div class="col-md-12 col-lg-7 align-self-stretch">
+                                                    <div class="row pt-3 pt-md-4 pb-4">
+                                                        <div class="col-sm-12 pl-3 pr-3 pl-md-4 pr-md-4">
+                                                            <h5 class="font-weight-bold mb-2 mb-lg-4">Delivery Expectation</h5>
+                                                            <h5 class="font-weight-normal">[예상배송일:구현필요]</h5>
+                                                        </div><!-- end col -->
+                                                    </div><!-- end row -->
+                                                </div><!-- end col -->
+                                            </div><!-- end row -->
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </div><!-- end col -->
+
+                                <div class="col-md-3 col-lg-2 d-none d-md-block">
+                                    <div class="row pt-4 pb-4">
+                                        <div class="col-sm-12 pl-4 pr-4 text-right">
+                                            <th:block th:if="${order.orderStatus == T(com.shop.constant.OrderStatus).ORDER}">
+                                                <button type="button" class="btn btn-outline-secondary" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문취소</button>
+                                            </th:block>
+                                            <th:block th:unless="${order.orderStatus == T(com.shop.constant.OrderStatus).ORDER}">
+                                                <h4>(취소 완료)</h4>
+                                            </th:block>
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </div><!-- end col -->
+                            </div><!-- end row -->
+                        </li><!-- end list-group-item -->
+                        </div>
+                        <!-- 주문 이력 목록 끝 -->
+                    </ul><!-- end list-group -->
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section>
+    <!-- end section -->
+
+    <div th:with="start=${(orders.number/maxPage)*maxPage + 1}, end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})" >
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item" th:classappend="${orders.number eq 0}?'disabled':''">
+                <a th:href="@{'/orders/' + ${orders.number-1}}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>Previous</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${orders.number eq page-1}?'active':''">
+                <a th:href="@{'/orders/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:classappend="${orders.number+1 ge orders.totalPages}?'disabled':''">
+                <a th:href="@{'/orders/' + ${orders.number+1}}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>Next</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+    <script th:src="@{/assets/js/theme.js?cb=1609799846196}"></script>
+
+</div>
+
+</html>

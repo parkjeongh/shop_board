@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+
+            calculateToalPrice();
+
+            $("#count").change( function(){
+                calculateToalPrice();
+            });
+        });
+
+        function calculateToalPrice(){
+            var count = $("#count").val();
+            var price = $("#price").val();
+            var totalPrice = price*count;
+            $("#totalPrice").html(totalPrice + '원');
+        }
+
+        function order(){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/order";
+            var paramData = {
+                itemId: $("#itemId").val(),
+                count: $("#count").val()
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("주문이 완료 되었습니다.");
+                    location.href='/';
+                },
+                error : function(jqXHR, status, error){
+
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+
+                }
+            });
+        }
+
+        function addCart(){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/cart";
+            var paramData = {
+                itemId : $("#itemId").val(),
+                count : $("#count").val()
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("상품을 장바구니에 담았습니다.");
+                    location.href='/';
+                },
+                error : function(jqXHR, status, error){
+
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+
+                }
+            });
+        }
+
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+
+    <input type="hidden" id="itemId" th:value="${item.id}">
+
+    <!-- start section -->
+    <section class="bg-light overflow-hidden">
+        <div class="container-lg container-fluid">
+            <div class="row mx-n4">
+                <!-- 모바일 화면 시작 -->
+                <div class="col-12 col-lg-7 pt-0 pt-lg-25px pb-0 pb-lg-5 px-4">
+                    <div class="row">
+                        <div class="col-12 order-1 order-md-0 d-block py-20px pb-40px py-lg-0 d-lg-none bg-white">
+
+                            <div class="row align-items-center mb-4">
+                                <div class="col">
+                                    <span class="font-weight-medium">[*원두키워드:구현필요*]</span>
+                                </div><!-- end col -->
+
+                                <div class="col text-right">
+                                    <a href="javascript:void(0);">
+                                        <i class="flaticon-like h2"></i>
+                                    </a>
+                                </div><!-- end col -->
+                            </div><!-- end row -->
+
+                            <h3 class="font-weight-bold mb-20px"><span th:text="${item.itemNm}"></span></h3>
+                            <p class="mb-25px" th:text="${item.itemDetail}"></p>
+
+                            <ul class="list-group list-group-flush border-top">
+                                <li class="list-group-item py-25px">
+                                    <div class="row">
+                                        <div class="col">원
+                                            <input type="hidden" th:value="${item.price}" id="price" name="price">
+                                            <h3 class="font-weight-normal mb-0"><span th:text="${item.price}"></span>원</h3>
+                                        </div><!-- end col -->
+                                        <div class="col text-right d-none d-sm-block">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item mr-4">
+                                                    <a href="#"><i class="flaticon-facebook text-dark text-hover-primary h4"></i></a>
+                                                </li>
+                                                <li class="list-inline-item mr-4">
+                                                    <a href="#"><i class="flaticon-pinterest text-dark text-hover-primary h4"></i></a>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <a href="#"><i class="flaticon-instagram text-dark text-hover-primary h4"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </li><!-- end list-group-item -->
+
+                                <li class="list-group-item py-25px">
+                                    <h5 class="font-weight-normal mb-0">FREE 2-Day Shipping</h5>
+                                </li><!-- end list-group-item -->
+
+                                <!-- 주문 수량 -->
+                                <li class="list-group-item border-bottom-0 py-25px">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="qty-container">
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" name="count" value="1" min="1">
+                                                    <div class="input-group-append">
+                                                        <button class="qty" type="button" data-func="plus" data-field="count"><i class="flaticon-play-button"></i></button>
+                                                        <button class="qty" type="button" data-func="minus" data-field="count"><i class="flaticon-play-button-1"></i></button>
+                                                    </div>
+                                                </div><!-- end input-group -->
+                                            </div><!-- end qty-container -->
+                                        </div><!-- end col -->
+
+                                        <div class="col text-right d-block d-sm-none">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item mr-4">
+                                                    <a href="#"><i class="flaticon-facebook text-dark text-hover-primary h4"></i></a>
+                                                </li>
+                                                <li class="list-inline-item mr-4">
+                                                    <a href="#"><i class="flaticon-pinterest text-dark text-hover-primary h4"></i></a>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <a href="#"><i class="flaticon-instagram text-dark text-hover-primary h4"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </li><!-- end list-group-item -->
+                            </ul><!-- end list-group -->
+
+                            <!-- 장바구니, 주문하기 버튼 -->
+                            <div th:if="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="row py-10px px-3 bg-white fixed-bottom">
+                                <div class="col-12 col-sm-6 mb-10px mb-md-0">
+                                    <button type="button" class="btn btn-minimalis-outline-dark btn-block borderRound" onclick="addCart()">장바구니 담기</button>
+                                </div><!-- end col -->
+                                <div class="col-12 col-sm-6">
+                                    <button type="button" class="btn btn-minimalis-dark btn-block borderRound" onclick="order()">주문하기</button>
+                                </div><!-- end col -->
+                            </div><!-- end row -->
+
+                            <!-- 품절 버튼 -->
+                            <div th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="row py-10px px-3 bg-white fixed-bottom">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-minimalis-outline-dark btn-block borderRound">품절</button>
+                                </div><!-- end col -->
+                            </div><!-- end row -->
+                        </div><!-- end col -->
+
+                        <!-- 제품 사진 -->
+                        <div class="col-12 order-0 order-md-1 pt-20px pt-md-0 pb-40px py-lg-0 bg-white bg-md-transparent gallery-popup">
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <a th:href="${item.itemImgDtoList[0].imgUrl}">
+                                        <img class="w-100" th:src="${item.itemImgDtoList[0].imgUrl}" th:alt="${item.itemNm}" />
+                                    </a>
+                                </div><!-- end col -->
+                            </div><!-- end row -->
+
+                            <div class="row mb-lg-5">
+                                <div class="col-6">
+                                    <a th:href="${item.itemImgDtoList[1].imgUrl}">
+                                        <img class="w-100 borderRound" th:src="${item.itemImgDtoList[1].imgUrl}" th:alt="${item.itemNm}" />
+                                    </a>
+                                </div><!-- end col -->
+                                <div class="col-6">
+                                    <a th:href="${item.itemImgDtoList[2].imgUrl}">
+                                        <img class="w-100 borderRound" th:src="${item.itemImgDtoList[2].imgUrl}" th:alt="${item.itemNm}" />
+                                    </a>
+                                </div><!-- end col -->
+                            </div><!-- end row -->
+                        </div><!-- end col -->
+
+                        <div class="col-12 order-2 order-md-2 pt-40px pt-md-0 pb-40px pb-lg-0">
+                            <h3 class="font-weight-normal text-uppercase mb-3">[*로스터리이름:구현필요*]</h3>
+
+                            <p class="mb-3">Read on, and go through all the information.</p>
+
+                            <h4 class="font-weight-normal mb-40px">[*로스터리소개:구현필요*]</h4>
+
+                            <img class="w-100 mb-4 borderRound" th:src="${item.itemImgDtoList[3].imgUrl}" alt="" />
+
+                            <ul class="list-group list-group-flush border-bottom">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <p class="text-uppercase mb-0">잘 맞는 추출방법:</p>
+                                        </div><!-- end col -->
+                                        <div class="col-7">
+                                            <p class="font-weight-medium text-uppercase mb-0">[*추출방법:구현필요*]</p>
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </li><!-- end list-group-item -->
+
+                                <li class="list-group-item">
+                                    <div class="row mt-3">
+                                        <div class="col-5">
+                                            <p class="text-uppercase mb-0">원산지:</p>
+                                        </div><!-- end col -->
+                                        <div class="col-7">
+                                            <p class="font-weight-medium text-uppercase mb-0">[*원산지:구현필요*]</p>
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </li><!-- end list-group-item -->
+
+                                <li class="list-group-item">
+                                    <div class="row mt-3">
+                                        <div class="col-5">
+                                            <p class="text-uppercase mb-0">가공방식:</p>
+                                        </div><!-- end col -->
+                                        <div class="col-7">
+                                            <p class="font-weight-medium text-uppercase mb-0">[*가공방식:구현필요*]</p>
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </li><!-- end list-group-item -->
+
+                                <li class="list-group-item">
+                                    <div class="row mt-3">
+                                        <div class="col-5">
+                                            <p class="text-uppercase mb-0">품종:</p>
+                                        </div><!-- end col -->
+                                        <div class="col-7">
+                                            <p class="font-weight-medium text-uppercase mb-0">[*품종:구현필요*]</p>
+                                        </div><!-- end col -->
+                                    </div><!-- end row -->
+                                </li><!-- end list-group-item -->
+                            </ul><!-- end list-group -->
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div><!-- end col -->
+                <!-- 모바일 화면 끝 -->
+
+                <!-- 데스크탑 화면 시작 -->
+                <div class="col-lg-5 bg-white layer-white-before px-4 d-none d-lg-block">
+                    <div class="sticky-product-sidebar pt-25px pb-5">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row align-items-center mb-4">
+                                    <div class="col">
+                                        <span class="font-weight-medium">[*원두키워드:구현필요*]</span>
+                                    </div><!-- end col -->
+
+                                    <div class="col text-right">
+                                        <a href="javascript:void(0);">
+                                            <i class="flaticon-like h2"></i>
+                                        </a>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <h3 class="font-weight-bold mb-20px"><span th:text="${item.itemNm}"></span></h3>
+                                <p class="mb-25px" th:text="${item.itemDetail}"></p>
+
+                                <ul class="list-group list-group-flush border-top">
+                                    <li class="list-group-item py-25px">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h3 class="font-weight-normal mb-0"><span th:text="${item.price}"></span>원</h3>
+                                            </div><!-- end col -->
+                                            <div class="col text-right">
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item mr-4">
+                                                        <a href="#"><i class="flaticon-facebook text-dark text-hover-primary h4"></i></a>
+                                                    </li>
+                                                    <li class="list-inline-item mr-4">
+                                                        <a href="#"><i class="flaticon-pinterest text-dark text-hover-primary h4"></i></a>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <a href="#"><i class="flaticon-instagram text-dark text-hover-primary h4"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div><!-- end col -->
+                                        </div><!-- end row -->
+                                    </li><!-- end list-group-item -->
+
+                                    <li class="list-group-item py-25px">
+                                        <h5 class="font-weight-normal mb-0">FREE 2-Day Shipping</h5>
+                                    </li><!-- end list-group-item -->
+
+                                    <!-- 주문 수량 조절 -->
+                                    <li class="list-group-item border-bottom-0 py-25px">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="qty-container">
+                                                    <div class="input-group">
+                                                        <input type="number" name="count" id="count" class="form-control borderRound" value="1" min="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col text-right">
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item mr-4">
+                                                        <h5>Total</h5>
+                                                    </li>
+                                                    <!-- 주문 합계 금액 -->
+                                                    <li class="list-inline-item mr-4">
+                                                        <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
+                                                    </li>
+                                                </ul>
+                                            </div><!-- end col -->
+                                        </div>
+                                    </li><!-- end list-group-item -->
+                                </ul><!-- end list-group -->
+
+                                <!-- 장바구니, 주문하기 버튼 -->
+                                <div th:if="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="row mt-3 mb-4">
+                                    <div class="col-12 col-sm-6">
+                                        <button type="button" class="btn btn-minimalis-outline-dark btn-block borderRound" onclick="addCart()">장바구니 담기</button>
+                                    </div><!-- end col -->
+                                    <div class="col-12 col-sm-6">
+                                        <button type="button" class="btn btn-minimalis-dark btn-block borderRound" onclick="order()">주문하기</button>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                                <!-- 품절 버튼 -->
+                                <div th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="row mt-3 mb-4">
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-minimalis-outline-dark btn-block borderRound">품절</button>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end sticky-product-sidebar -->
+                </div><!-- end col -->
+                <!-- 데스크탑 화면 끝 -->
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section>
+    <!-- end section -->
+
+
+
+    <!--&lt;!&ndash; start review section &ndash;&gt;
+    <section class="py-40px py-lg-6 bg-white border-top">
+        <div class="container-lg container-fluid">
+            <div class="row">
+                <div class="col-12 text-lg-center">
+                    <h2 class="mb-3 mb-lg-5">Customer Review</h2>
+                </div>&lt;!&ndash; end col &ndash;&gt;
+            </div>&lt;!&ndash; end row &ndash;&gt;
+
+            <div class="row justify-content-lg-center">
+                <div class="col-md-8 col-lg-6 text-lg-center">
+                    <h5 class="font-weight-bold mb-2">Andre</h5>
+
+                    <div class="rating mb-2">
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star"></i></label>
+                    </div>&lt;!&ndash; end rating &ndash;&gt;
+
+                    <p>Fast shipping and great quality of product, amazin color with golden gradient, truly love it.</p>
+                </div>&lt;!&ndash; end col &ndash;&gt;
+            </div>&lt;!&ndash; end row &ndash;&gt;
+
+            <hr class="border-top-0" />
+
+            <div class="row justify-content-lg-center">
+                <div class="col-md-8 col-lg-6 text-lg-center">
+                    <h5 class="font-weight-bold mb-2">Nicolo</h5>
+
+                    <div class="rating mb-2">
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                    </div>&lt;!&ndash; end rating &ndash;&gt;
+
+                    <p>The product is amazing, Shipping has lasted only 2 days as they mention on product information, amazing job Minimalis.</p>
+                </div>&lt;!&ndash; end col &ndash;&gt;
+            </div>&lt;!&ndash; end row &ndash;&gt;
+
+            <hr class="border-top-0" />
+
+            <div class="row justify-content-lg-center">
+                <div class="col-md-8 col-lg-6 text-lg-center">
+                    <h5 class="font-weight-bold mb-2">Jacob</h5>
+
+                    <div class="rating mb-2">
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                        <label><i class="flaticon-star text-primary"></i></label>
+                    </div>&lt;!&ndash; end rating &ndash;&gt;
+
+                    <p>Amazing product, I will absulutely comeback to buy another product for my home, good job Minimalis.</p>
+                </div>&lt;!&ndash; end col &ndash;&gt;
+            </div>&lt;!&ndash; end row &ndash;&gt;
+        </div>&lt;!&ndash; end container &ndash;&gt;
+    </section>
+    &lt;!&ndash; end review section &ndash;&gt;
+
+    &lt;!&ndash; start review section &ndash;&gt;
+    <section class="py-40px py-lg-6 bg-white border-top">
+        <div class="container-lg container-fluid">
+            <div class="row justify-content-lg-center">
+                <div class="col-12 col-lg-8 text-lg-center">
+                    <h2 class="mb-3">Write a review</h2>
+
+                    <p class="lead mb-3">Be the first to review “Regular Fit V-Neck Sweater”</p>
+
+                    <form id="reviewForm" method="get" action="/">
+                        <div class="rate-star mb-4">
+                            <input type="radio" id="rat_star1" name="rat_rate" value="1" />
+                            <label for="rat_star1">
+                                <i class="flaticon-star"></i>
+                            </label>
+
+                            <input type="radio" id="rat_star2" name="rat_rate" value="2" />
+                            <label for="rat_star2">
+                                <i class="flaticon-star"></i>
+                            </label>
+
+                            <input type="radio" id="rat_star3" name="rat_rate" value="3" />
+                            <label for="rat_star3">
+                                <i class="flaticon-star"></i>
+                            </label>
+
+                            <input type="radio" id="rat_star4" name="rat_rate" value="4" />
+                            <label for="rat_star4">
+                                <i class="flaticon-star"></i>
+                            </label>
+
+                            <input type="radio" id="rat_star5" name="rat_rate" value="5" />
+                            <label for="rat_star5">
+                                <i class="flaticon-star"></i>
+                            </label>
+                        </div>&lt;!&ndash; end rate-star &ndash;&gt;
+
+                        <div class="row">
+                            <div class="form-group col-12 col-md-6 mb-4">
+                                <label class="d-block d-lg-none" for="cName">Name</label>
+                                <input type="text" class="form-control" id="cName" placeholder="Name" required>
+                            </div>&lt;!&ndash; end form-group &ndash;&gt;
+                            <div class="form-group col-12 col-md-6 mb-4">
+                                <label class="d-block d-lg-none" for="cEmail">Email</label>
+                                <input type="email" class="form-control" id="cEmail" placeholder="Email" required>
+                            </div>&lt;!&ndash; end form-group &ndash;&gt;
+                        </div>&lt;!&ndash; end row &ndash;&gt;
+                        <div class="form-group mb-5">
+                            <label class="d-block d-lg-none" for="cReview">Review</label>
+                            <textarea class="form-control" id="cReview" rows="5" placeholder="Write a review" required></textarea>
+                        </div>&lt;!&ndash; end form-group &ndash;&gt;
+                        <div class="form-group mb-0 text-right text-lg-center">
+                            <button type="submit" class="btn btn-minimalis-dark btn-arrow mb-2">
+                                    <span class="inner-btn">
+                                        Submit
+                                        <span class="arrow">
+                                            <span class="arrow-icon"></span>
+                                        </span>
+                                    </span>
+                            </button>
+                        </div>&lt;!&ndash; end form-group &ndash;&gt;
+                    </form>
+                </div>&lt;!&ndash; end col &ndash;&gt;
+            </div>&lt;!&ndash; end row &ndash;&gt;
+        </div>&lt;!&ndash; end container &ndash;&gt;
+    </section>
+    &lt;!&ndash; end review section &ndash;&gt;
+    &lt;!&ndash; Javascript File &ndash;&gt;
+    <script type="text/javascript" th:src="@{/assets/js/theme.js?cb=1609799846196}"></script>-->
+
+</div>
+
+</html>

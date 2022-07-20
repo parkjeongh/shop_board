@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+      lang="kr">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<div layout:fragment="content">
+
+    <!-- 상단 제목 시작 -->
+    <section class="pt-4 pb-4 pt-lg-4 pb-lg-2">
+        <div class="container-lg container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 text-center">
+
+                    <h2 class="font-weight-bolder text-primary mb-0 mb-lg-3">모든 커피</h2>
+
+                </div><!-- end col -->
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section>
+    <!-- 상단 제목 끝 -->
+
+    <!-- start product section -->
+    <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">
+    <div th:if="${not #strings.isEmpty(itemSearchDto.searchQuery)}" class="center">
+        <p class="h3 font-weight-bold" th:text="${itemSearchDto.searchQuery} + '검색 결과'"></p>
+    </div>
+
+    <section class="pt-1 pb-4 pb-md-5 pt-lg-3 pb-lg-7 bg-white">
+        <div class="container-lg container-fluid">
+            <div class="row">
+
+                <!-- start sidebar -->
+                <div class="col-12 col-lg-3 d-none d-lg-block">
+
+
+                    <div class="widgets mb-3">
+                        <h4 class="font-weight-bolder mb-4">원두 찾기</h4>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="type1">
+                                <label class="custom-control-label" for="category1">디카페인</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input rounded-0" id="type2">
+                                <label class="custom-control-label" for="category2">싱글 오리진</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input rounded-0" id="type3">
+                                <label class="custom-control-label" for="category3">블렌드</label>
+                            </div>
+                        </div>
+
+                    </div><!-- end widgets -->
+
+                    <hr class="my-4" />
+
+                    <!-- 맛과 향 -->
+                    <div class="widgets mb-3">
+                        <h4 class="font-weight-bolder mb-4">맛과 향</h4>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorBlack">
+                                    <label for="colorBlack">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:#1E1E1E; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">스모키</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorBrass">
+                                    <label for="colorBrass">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:#ECAF4F; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">달콤한</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorGold">
+                                    <label for="colorGold">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:#D6AF26; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">견과류</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorGreen">
+                                    <label for="colorGreen">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:green; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">허브</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorBronze">
+                                    <label for="colorBronze">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:#957144; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">초콜릿</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorWhite">
+                                    <label for="colorWhite">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:#FFFFFF; border: 1px solid #979797; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">깔끔한</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorYellow">
+                                    <label for="colorYellow">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:yellow; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">상큼한</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorDarkRed">
+                                    <label for="colorDarkRed">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:darkred; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">과일</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-4">
+                                <div class="custom-checkbox filter-checkbox d-inline-block mb-3 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="colorCoral">
+                                    <label for="colorCoral">
+                                            <span class="custom-control-label d-inline-block text-center">
+                                                <span class="color-filter rounded-circle" style="background-color:coral; width: 30px; height: 30px;"></span>
+                                            </span>
+                                        <span class="d-block font-weight-normal text-secondary">꽃향기</span>
+                                    </label>
+                                </div>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end widgets -->
+
+                    <hr class="my-4" />
+
+                    <div class="widgets mb-3">
+                        <h4 class="font-weight-bolder mb-4">로스팅 포인트</h4>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="category1">
+                                <label class="custom-control-label" for="category1">라이트</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input rounded-0" id="category2">
+                                <label class="custom-control-label" for="category2">라이트 미디엄</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input rounded-0" id="category3">
+                                <label class="custom-control-label" for="category3">미디엄</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input rounded-0" id="category4">
+                                <label class="custom-control-label" for="category4">미디엄 다크</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input rounded-0" id="category5">
+                                <label class="custom-control-label" for="category5">다크</label>
+                            </div>
+                        </div>
+
+                    </div><!-- end widgets -->
+
+                    <hr class="my-4" />
+
+                    <div class="widgets mb-3">
+                        <h4 class="font-weight-bolder mb-4">Price</h4>
+
+                        <form method="post" class="price-range" data-start-min="10000" data-start-max="25000" data-min="5000" data-max="50000" data-step="1000">
+                            <div class="ui-range-slider mb-3"></div>
+
+                            <div class="d-flex justify-content-between ui-range-values">
+                                <div class="flex-grow-1 ui-range-value-min">
+                                    <h6 class="font-weight-normal">From: </h6><h5 class="font-weight-bold"><span></span>원</h5>
+                                    <input type="hidden">
+                                </div>
+                                <div class="ui-range-value-max">
+                                    <h6 class="font-weight-normal">To: </h6><h5 class="font-weight-bold"><span></span>원</h5>
+                                    <input type="hidden">
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- end widgets -->
+
+
+                </div><!-- end col -->
+
+                <!-- start content -->
+                <div class="col-12 col-lg-9">
+                    <div class="row">
+                        <!-- th block 시작 -->
+                        <th:block th:each="item, status: ${items.getContent()}">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-6 col-xl-4">
+                                <div class="card product-card-style border-0 bg-gray-200 borderRound">
+                                    <div class="card-img overflow-hidden">
+                                        <!-- Image -->
+                                        <figure class="mb-0">
+                                            <img th:src="${item.imgUrl}" th:alt="${item.itemNm}">
+                                        </figure>
+
+                                        <!-- Action -->
+                                        <button class="card-action hover-card-action action-top action-right" type="button">
+                                            <span class="like-product">
+                                                <i class="flaticon-like h3"></i>
+                                                <i class="flaticon-like-1 h3 after d-none"></i>
+                                            </span>
+                                        </button>
+
+                                        <span class="card-action action-top action-left">
+                                            <span class="badge badge-primary rounded-lg font-weight-bold text-uppercase px-3 py-2">[*NEW*]</span>
+                                        </span>
+                                        <!--                                    <span class="card-action action-top action-left">-->
+                                        <!--                                            <span class="badge badge-danger rounded-0 font-weight-bold text-uppercase px-3 py-2">-30%</span>-->
+                                        <!--                                        </span>-->
+                                        <!--                                    <span class="card-action action-top action-left">-->
+                                        <!--                                            <span class="badge badge-warning rounded-0 font-weight-bold text-uppercase px-3 py-2">Out of stock</span>-->
+                                        <!--                                        </span>-->
+                                    </div><!-- end card-img -->
+
+                                    <div class="card-body">
+                                        <div class="block-content text-center">
+                                            <h6 class="font-weight-normal text-uppercase mb-3">[*로스터리이름:구현필요*]</h6>
+                                            <h5 class="font-weight-bolder text-uppercase mb-3"><a class="text-dark" th:href="'/item/' +${item.id}">[[${item.itemNm}]]</a></h5>
+                                            <p class="font-weight-normal">[[${item.price}]]원</p>
+
+                                            <div class="d-flex mt-4">
+                                                <div class="flex-grow-1 pl-1">
+                                                    <a href="#" class="btn btn-outline-dark btn-block font-weight-bolder borderRound">
+                                                        Add to cart
+                                                    </a>
+                                                </div><!-- end col -->
+                                                <div class="pl-2 pr-1">
+                                                    <a href="#" class="btn btn-outline-dark font-weight-bolder borderRound" style="min-width: 40px;" data-toggle="modal" data-target="#quickViewModal">
+                                                        <i class="flaticon-visibility"></i>
+                                                    </a>
+                                                </div>
+                                            </div><!-- end d-flex -->
+                                        </div><!-- end block-content -->
+                                    </div><!-- end card-body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                        </th:block>
+                        <!-- th block 끝 -->
+                    </div><!-- end row -->
+
+                    <!-- 페이지 이동 버튼 -->
+                    <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item" th:classappend="${items.first}?'disabled'">
+                                <a th:onclick="'javascript:page(' + ${items.number - 1} + ')'" aria-label='Previous' class="page-link">
+                                    <span aria-hidden='true'>Previous</span>
+                                </a>
+                            </li>
+
+                            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
+                                <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${items.last}?'disabled'">
+                                <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'" aria-label='Next' class="page-link">
+                                    <span aria-hidden='true'>Next</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section>
+    <!-- end product section -->
+
+    <!-- Javascript File -->
+    <script type="text/javascript" th:src="@{/assets/js/theme.js?cb=1609799846196}"></script>
+</div>
+
+</html>

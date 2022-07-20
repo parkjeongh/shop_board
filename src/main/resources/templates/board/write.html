@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<div layout:fragment="content">
+<form action="/post" method="post">
+    제목 : <input type="text" name="title"> <br>
+    작성자 : <input type="text" name="writer"> <br>
+    <textarea name="content"></textarea><br>
+
+    <input type="submit" value="등록">
+</form>
+</div>
+
+</body>
+</html>
